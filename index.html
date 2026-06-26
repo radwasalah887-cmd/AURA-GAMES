@@ -3,253 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Arcade | Ultimate Gaming</title>
+    <title>Vortex Arcade | Magical Gaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === الأساسيات والخلفية الديناميكية === */
-        :root {
-            --bg-color: #0f0c29;
-            --primary: #ff007f;
-            --secondary: #7b2cbf;
-            --text-light: #ffffff;
-        }
+        /* === الأساسيات والخلفية === */
+        :root { --bg-color: #080517; --primary: #ff007f; --secondary: #7b2cbf; --text-light: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-color); color: var(--text-light); overflow-x: hidden; }
 
-        /* الأشكال المتحركة في الخلفية */
         .background-shapes { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; }
-        .shape { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 10s infinite alternate ease-in-out; }
-        .shape1 { width: 400px; height: 400px; background: var(--primary); top: -10%; left: -10%; animation-delay: 0s; }
-        .shape2 { width: 500px; height: 500px; background: var(--secondary); bottom: -20%; right: -10%; animation-delay: 2s; }
-        
-        @keyframes float {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(50px) scale(1.1); }
-        }
+        .shape { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.5; animation: float 12s infinite alternate ease-in-out; }
+        .shape1 { width: 500px; height: 500px; background: var(--primary); top: -10%; left: -10%; }
+        .shape2 { width: 600px; height: 600px; background: var(--secondary); bottom: -20%; right: -10%; animation-delay: 3s; }
+        @keyframes float { 0% { transform: translateY(0) scale(1) rotate(0deg); } 100% { transform: translateY(60px) scale(1.2) rotate(20deg); } }
 
-        /* === الهيدر وتسجيل الدخول === */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(15, 12, 41, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        /* === الهيدر === */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(8, 5, 23, 0.7); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .logo { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 2px; }
-        .logo span { color: var(--primary); }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         .nav-links { display: flex; gap: 20px; }
         .nav-links a { color: #fff; text-decoration: none; font-weight: 600; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-        .login-btn { background: linear-gradient(45deg, var(--primary), var(--secondary)); border: none; padding: 10px 25px; color: white; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .login-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+        .nav-links a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
 
-        /* === رسالة الترحيب الذكية === */
-        #welcome-toast { position: fixed; top: 100px; right: -400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-left: 5px solid var(--primary); padding: 20px; border-radius: 10px; z-index: 1000; transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* === إشعار الترحيب === */
+        #welcome-toast { position: fixed; top: 100px; right: -400px; background: rgba(20, 15, 45, 0.9); backdrop-filter: blur(15px); border-left: 5px solid var(--primary); padding: 20px; border-radius: 10px; z-index: 1000; transition: right 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         #welcome-toast.show { right: 20px; }
         .toast-title { font-weight: 800; font-size: 18px; margin-bottom: 5px; color: var(--primary); }
+
+        /* === مربعات الألعاب (الأكثر جاذبية) === */
+        .games-section { padding: 60px 50px; text-align: center; }
+        .games-section h2 { font-size: 40px; margin-bottom: 40px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; margin-bottom: 30px; }
         
-        /* === قسم الألعاب (Infinite Scroll) === */
-        .games-section { padding: 50px; text-align: center; }
-        .games-section h2 { font-size: 36px; margin-bottom: 30px; }
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
-        .game-card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); transition: 0.3s; cursor: pointer; }
-        .game-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); border-color: var(--primary); }
-        .game-img { width: 100%; height: 150px; background: #333; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
-        .loading-spinner { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        .game-card { 
+            background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 15px; 
+            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .game-card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            border-color: var(--primary); 
+            box-shadow: 0 20px 40px rgba(255, 0, 127, 0.3); 
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .image-container { position: relative; width: 100%; height: 180px; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        .game-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .game-card:hover .game-img { transform: scale(1.1); filter: brightness(0.7); }
+        
+        /* تأثير زر التشغيل عند التمرير */
+        .play-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(123, 44, 191, 0.4); display: flex; justify-content: center; align-items: center; 
+            opacity: 0; transition: 0.4s; backdrop-filter: blur(3px);
+        }
+        .game-card:hover .play-overlay { opacity: 1; }
+        .play-overlay i { font-size: 60px; color: #fff; transform: scale(0.5); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-shadow: 0 0 20px var(--primary); }
+        .game-card:hover .play-overlay i { transform: scale(1); }
+
+        .game-type { position: absolute; top: 15px; right: 15px; background: linear-gradient(45deg, var(--primary), var(--secondary)); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .game-card h3 { font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+
+        .loading-spinner { display: none; margin: 20px auto; width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* === قسم التعريف (About Me) === */
-        .about-me { background: rgba(0,0,0,0.4); padding: 50px; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .dev-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px; }
+        /* === الشاشة الساحرة لتشغيل اللعبة === */
+        .game-player-modal { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(5, 2, 15, 0.85); backdrop-filter: blur(25px); /* تأثير ضبابي ساحر */
+            z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            opacity: 0; visibility: hidden; transition: all 0.5s ease;
+            transform: scale(1.1); /* تأثير الزوم عند الدخول */
+        }
+        .game-player-modal.active { opacity: 1; visibility: visible; transform: scale(1); }
+        
+        .game-player-header { width: 90%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .game-player-header h3 { font-size: 24px; text-shadow: 0 0 15px var(--primary); }
+        
+        .close-game-btn { 
+            background: transparent; color: white; border: 2px solid var(--primary); 
+            padding: 10px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; 
+        }
+        .close-game-btn:hover { background: var(--primary); box-shadow: 0 0 20px var(--primary); transform: translateY(-3px); }
+        
+        .iframe-container { 
+            width: 90%; max-width: 1100px; height: 75vh; background: #000; 
+            border-radius: 20px; overflow: hidden; position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.4); 
+            animation: borderPulse 4s infinite alternate; /* إطار يتنفس */
+        }
+        @keyframes borderPulse {
+            0% { border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(255,0,127,0.4); }
+            100% { border: 2px solid var(--secondary); box-shadow: 0 0 60px rgba(123,44,191,0.6); }
+        }
+        iframe { width: 100%; height: 100%; border: none; }
 
-        /* === تصميم نافذة تسجيل الدخول (Popup) === */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s ease;
-        }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        
-        .modal-content {
-            background: rgba(20, 15, 45, 0.9); border: 1px solid var(--primary);
-            padding: 40px; border-radius: 20px; width: 90%; max-width: 400px;
-            text-align: center; position: relative;
-            transform: translateY(-50px) scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(255, 0, 127, 0.2);
-        }
-        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
-        
-        .close-modal {
-            position: absolute; top: 15px; right: 20px; background: none; border: none;
-            color: #fff; font-size: 28px; cursor: pointer; transition: 0.3s;
-        }
-        .close-modal:hover { color: var(--primary); transform: rotate(90deg); }
-        
-        .input-group { position: relative; margin-bottom: 20px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
-        .input-group input {
-            width: 100%; padding: 15px 15px 15px 45px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff;
-            font-size: 16px; outline: none; transition: 0.3s;
-        }
-        .input-group input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); }
-        
-        .submit-login-btn {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold;
-            cursor: pointer; transition: 0.3s; margin-top: 10px;
-        }
-        .submit-login-btn:hover { box-shadow: 0 0 20px var(--primary); transform: translateY(-2px); }
+        /* === قسم المطور === */
+        .about-me { background: rgba(0,0,0,0.5); padding: 50px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .dev-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid transparent; background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box, linear-gradient(45deg, var(--primary), var(--secondary)) border-box; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- الأشكال المتحركة في الخلفية -->
     <div class="background-shapes">
         <div class="shape shape1"></div>
         <div class="shape shape2"></div>
     </div>
 
-    <!-- الإشعار الترحيبي -->
     <div id="welcome-toast">
-        <div class="toast-title"><i class="fas fa-gamepad"></i> Hey there!</div>
-        <div id="toast-msg">Welcome to our world, dear!</div>
+        <div class="toast-title"><i class="fas fa-magic"></i> Hey there!</div>
+        <div id="toast-msg">Welcome to our magical world!</div>
     </div>
 
-    <!-- الهيدر -->
     <header>
         <div class="logo">Vortex <span>Arcade</span></div>
         <nav class="nav-links">
             <a href="#">Home</a>
-            <a href="#games">All Games</a>
-            <a href="#about">About Developer</a>
+            <a href="#games">Games</a>
+            <a href="#about">About</a>
         </nav>
-        <button class="login-btn"><i class="fas fa-user"></i> Login / Register</button>
     </header>
 
-    <!-- قسم الألعاب الديناميكي -->
     <section class="games-section" id="games">
-        <h2>🔥 Trending Games</h2>
-        <div class="games-grid" id="games-container">
-            <!-- الألعاب ستظهر هنا تلقائياً -->
-        </div>
+        <h2>✨ Epic Experiences</h2>
+        <div class="games-grid" id="games-container"></div>
         <div class="loading-spinner" id="loader"></div>
     </section>
 
-    <!-- قسم المطور -->
-    <section class="about-me" id="about">
-        <img src="https://ui-avatars.com/api/?name=Radwa+Saleh&background=ff007f&color=fff" alt="Radwa" class="dev-avatar">
-        <h2>Radwa Saleh</h2>
-        <p style="color: #aaa; margin: 10px 0 20px;">Independent Web Developer & UI/UX Designer</p>
-        <p style="max-width: 600px; margin: 0 auto; line-height: 1.6;">
-            Welcome to Vortex Arcade. I created this platform to provide a seamless, beautiful, and dynamic gaming experience without annoying interruptions. Let's level up together!
-        </p>
-    </section>
-
-    <!-- نافذة تسجيل الدخول (Popup) -->
-    <div class="modal-overlay" id="login-modal">
-        <div class="modal-content">
-            <button class="close-modal" id="close-modal-btn">&times;</button>
-            <h2>Welcome Back, Gamer!</h2>
-            <p style="color: #aaa; margin-bottom: 20px; font-size: 14px;">Log in to save your progress</p>
-            
-            <form id="login-form">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email Address" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="submit-login-btn">Let's Play</button>
-            </form>
-            <p style="margin-top: 15px; font-size: 14px;">Don't have an account? <a href="#" style="color: var(--primary); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+    <!-- الشاشة الساحرة لتشغيل اللعبة -->
+    <div class="game-player-modal" id="game-player">
+        <div class="game-player-header">
+            <h3 id="playing-title"><i class="fas fa-gamepad"></i> Playing...</h3>
+            <button class="close-game-btn" onclick="closeGame()"><i class="fas fa-times"></i> Exit Game</button>
+        </div>
+        <div class="iframe-container">
+            <iframe id="game-iframe" src="" allowfullscreen></iframe>
         </div>
     </div>
 
+    <section class="about-me" id="about">
+        <img src="https://ui-avatars.com/api/?name=Radwa+Saleh&background=ff007f&color=fff&size=200" alt="Developer" class="dev-avatar">
+        <h2>Radwa Saleh</h2>
+        <p style="color: #aaa; margin-top: 5px;">Creating Magic Through Code</p>
+    </section>
+
     <script>
-        // === 1. نظام الترحيب الذكي (Smart Welcome) ===
-        window.addEventListener('DOMContentLoaded', () => {
-            const toast = document.getElementById('welcome-toast');
-            const toastMsg = document.getElementById('toast-msg');
-            const lastVisit = localStorage.getItem('vortex_lastVisit');
-            const now = new Date();
+        const gamesDatabase = [
+            { title: "Moto X3M", type: "Racing", img: "https://img.gamedistribution.com/2299dfa2990a424ca18a46f6f9fc5eb8-512x512.jpeg", url: "https://html5.gamedistribution.com/2299dfa2990a424ca18a46f6f9fc5eb8/" },
+            { title: "Fireboy & Watergirl", type: "Adventure", img: "https://img.gamedistribution.com/2ceaaaeaa9834226aaad8bb6bd911f93-512x512.jpeg", url: "https://html5.gamedistribution.com/2ceaaaeaa9834226aaad8bb6bd911f93/" },
+            { title: "Mahjong Classic", type: "Puzzle", img: "https://img.gamedistribution.com/174a72d7f8d641d491f25164bc9ba04a-512x512.jpeg", url: "https://html5.gamedistribution.com/174a72d7f8d641d491f25164bc9ba04a/" },
+            { title: "Subway Clash 3D", type: "Action", img: "https://img.gamedistribution.com/f9c0617300714eb8894df3c518cf2bf1-512x512.jpeg", url: "https://html5.gamedistribution.com/f9c0617300714eb8894df3c518cf2bf1/" },
+            { title: "8 Ball Pool", type: "Sports", img: "https://img.gamedistribution.com/00ccba20739c4a8a92e106b12a32cba9-512x512.jpeg", url: "https://html5.gamedistribution.com/00ccba20739c4a8a92e106b12a32cba9/" },
+            { title: "Onet Connect", type: "Logic", img: "https://img.gamedistribution.com/6c20539b7f574d758c56e3bd61eb8c7a-512x512.jpeg", url: "https://html5.gamedistribution.com/6c20539b7f574d758c56e3bd61eb8c7a/" }
+        ];
 
-            if (!lastVisit) {
-                // أول زيارة
-                toastMsg.innerText = "Welcome to our world, dear!";
-            } else {
-                // زيارة سابقة - حساب الأيام
-                const lastDate = new Date(lastVisit);
-                const diffTime = Math.abs(now - lastDate);
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
-                
-                if (diffDays > 0) {
-                    const formattedDate = lastDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                    toastMsg.innerText = `We missed you! You haven't visited us since ${formattedDate}.`;
-                } else {
-                    toastMsg.innerText = "Welcome back! Ready for more games?";
-                }
-            }
-
-            localStorage.setItem('vortex_lastVisit', now.toISOString());
-            setTimeout(() => toast.classList.add('show'), 1000);
-            setTimeout(() => toast.classList.remove('show'), 6000);
-        });
-
-        // === 2. نظام تحميل الألعاب (Infinite Scroll) ===
         const gamesContainer = document.getElementById('games-container');
         const loader = document.getElementById('loader');
-        let gameIndex = 1;
+        let loadCount = 0;
 
-        function createGameCard(index) {
-            const div = document.createElement('div');
-            div.className = 'game-card';
-            div.innerHTML = `
-                <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&q=80" alt="Game" class="game-img">
-                <h3>Awesome Game ${index}</h3>
-                <p style="color: var(--primary); margin-top: 5px;"><i class="fas fa-play"></i> Play Now</p>
-            `;
-            return div;
-        }
-
-        function loadGames(count = 8) {
+        function renderGames(count) {
             loader.style.display = 'block';
-            setTimeout(() => { 
+            setTimeout(() => {
                 for (let i = 0; i < count; i++) {
-                    gamesContainer.appendChild(createGameCard(gameIndex));
-                    gameIndex++;
+                    const game = gamesDatabase[loadCount % gamesDatabase.length];
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    card.onclick = () => openGame(game.url, game.title);
+                    
+                    card.innerHTML = `
+                        <div class="game-type">${game.type}</div>
+                        <div class="image-container">
+                            <img src="${game.img}" alt="${game.title}" class="game-img">
+                            <div class="play-overlay"><i class="fas fa-play"></i></div>
+                        </div>
+                        <h3>${game.title}</h3>
+                    `;
+                    gamesContainer.appendChild(card);
+                    loadCount++;
                 }
                 loader.style.display = 'none';
-            }, 800);
+            }, 600);
         }
 
-        loadGames(12);
+        renderGames(8);
 
         window.addEventListener('scroll', () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                if (loader.style.display !== 'block' && gameIndex < 50) { 
-                    loadGames(4);
-                }
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 150) {
+                if (loader.style.display !== 'block') renderGames(4);
             }
         });
 
-        // === 3. تشغيل نافذة تسجيل الدخول (Modal) ===
-        const loginBtn = document.querySelector('.login-btn');
-        const loginModal = document.getElementById('login-modal');
-        const closeModalBtn = document.getElementById('close-modal-btn');
+        const gameModal = document.getElementById('game-player');
+        const gameIframe = document.getElementById('game-iframe');
+        const playingTitle = document.getElementById('playing-title');
 
-        loginBtn.addEventListener('click', () => {
-            loginModal.classList.add('active');
-        });
+        function openGame(url, title) {
+            playingTitle.innerHTML = `<i class="fas fa-gamepad" style="color: var(--primary);"></i> Playing: ${title}`;
+            gameIframe.src = url; 
+            gameModal.classList.add('active'); 
+            document.body.style.overflow = 'hidden'; 
+        }
 
-        closeModalBtn.addEventListener('click', () => {
-            loginModal.classList.remove('active');
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                loginModal.classList.remove('active');
-            }
-        });
+        function closeGame() {
+            gameModal.classList.remove('active');
+            setTimeout(() => { gameIframe.src = ""; }, 400); // تأخير مسح الرابط حتى تنتهي الحركة
+            document.body.style.overflow = 'auto'; 
+        }
+        
+        window.onload = () => {
+            const toast = document.getElementById('welcome-toast');
+            setTimeout(() => toast.classList.add('show'), 1200);
+            setTimeout(() => toast.classList.remove('show'), 5000);
+        }
     </script>
 </body>
 </html>
-
