@@ -3,301 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Arcade | Next-Gen HTML5 Gaming Hub</title>
+    <title>Vortex Arcade | Next-Gen Cyber Hub</title>
     <style>
         :root {
-            --primary-neon: #ff007f;
-            --secondary-neon: #7f00ff;
-            --cyber-cyan: #00f0ff;
-            --dark-core: #06060c;
-            --card-surface: rgba(19, 19, 28, 0.75);
+            --primary: #ff007f;
+            --secondary: #7f00ff;
+            --bg: #050508;
+            --card: #0e0e16;
         }
 
         body {
-            background-color: var(--dark-core);
+            background-color: var(--bg);
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* خلفية النيون الديناميكية المتحركة */
-        body::before {
-            content: '';
+        /* جزيئات النيون المتحركة في الخلفية */
+        #bg-canvas {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 0, 127, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(127, 0, 255, 0.08) 0%, transparent 40%);
-            z-index: -2;
-        }
-
-        /* شبكة النيون المستقبلية المتحركة */
-        .cyber-grid {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            transform: perspective(500px) rotateX(60deg);
-            transform-origin: top;
-            animation: gridMove 20s linear infinite;
-            opacity: 0.5;
-        }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        /* شريط التنقل العلوي المتميز */
-        navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background: rgba(6, 6, 12, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 0, 127, 0.15);
-            position: sticky;
             top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, var(--primary-neon), var(--cyber-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
-        }
-
-        .nav-buttons .btn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .nav-buttons .btn-primary {
-            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
-            border: none;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-        }
-
-        .nav-buttons .btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary-neon);
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
-        }
-
-        /* نافذة رسائل الترحيب والاشتياق الذكية المضيئة */
-        .welcome-ticker {
-            background: rgba(255, 0, 127, 0.1);
-            border: 1px solid rgba(255, 0, 127, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            max-width: 800px;
-            margin: 30px auto 10px auto;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.1);
-            animation: pulseGlow 2s infinite alternate;
-        }
-@keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(255, 0, 127, 0.1); border-color: rgba(255, 0, 127, 0.2); }
-            100% { box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); border-color: rgba(255, 0, 127, 0.5); }
-        }
-
-        /* شبكة وحاويات الألعاب */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-align: left;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--primary-neon);
-            padding-left: 15px;
-            text-transform: uppercase;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 25px;
-        }
-
-        /* كروت الألعاب بتأثير نيون متحرك عند التمرير */
-        .game-card {
-            background: var(--card-surface);
-            backdrop-filter: blur(5px);
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--cyber-cyan);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.1);
-        }
-
-        .game-card img {
+            left: 0;
             width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 12px;
-            transition: transform 0.4s;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .game-card:hover img {
-            transform: scale(1.04);
-        }
-
-        .game-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-top: 14px;
-            color: #e2e2e8;
+        /* الهيدر ورسالة الترحيب الذكية */
+        header {
+            padding: 50px 20px;
             text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: color 0.3s;
+            background: linear-gradient(180deg, rgba(255, 0, 127, 0.1), transparent);
+            border-bottom: 1px solid rgba(255, 0, 127, 0.2);
         }
 
-        .game-card:hover .game-title {
-            color: var(--cyber-cyan);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
-        }
-
-        /* قسم التعريف الشخصي والسي في للمطور */
-        .about-section {
-            background: var(--card-surface);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 900px;
-            margin: 80px auto 40px auto;
-            text-align: left;
-            position: relative;
-        }
-
-        .about-section::after {
-            content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-            width: 40%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-neon), transparent);
-        }
-
-        .about-title {
-            font-size: 1.8rem;
-            color: #ffffff;
-            margin-top: 0;
+        h1 {
+            font-size: 3rem;
+            margin: 0;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px var(--primary);
         }
 
-        .about-subtitle {
-            color: var(--primary-neon);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+        .welcome-msg {
+            font-size: 1.2rem;
+            color: #00ffff;
+            margin-top: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        .about-text {
-            color: #b0b0c5;
-            line-height: 1.7;
-            font-size: 1rem;
-        }
+        /* حاوية الأدوات (الدخول والتعريف) */
+        .top-bar {
 
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .skill-tag {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #d1d1e0;
-        }
-/* نافذة تشغيل اللعبة الاحترافية (Modal) */
-        .game-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 4, 8, 0.96);
-            z-index: 10000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            width: 92%; height: 82%; max-width: 980px;
-            background: #000; border: 2px solid var(--cyber-cyan);
-            border-radius: 20px; box-shadow: 0 0 35px rgba(0, 240, 255, 0.4);
-            overflow: hidden;
-        }
-
-        .game-frame { width: 100%; height: 100%; border: none; }
-
-        .close-btn {
-            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
-            color: white; border: none; padding: 12px 35px; font-size: 1rem;
-            font-weight: bold; border-radius: 8px; margin-bottom: 20px;
-            cursor: pointer; box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
-        }
-
-        /* واجهة تسجيل الدخول المنبثقة السريعة */
-        .login-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 20000;
-            align-items: center; justify-content: center;
-        }
-
-        .login-box {
-            background: var(--card-surface); border: 1px solid var(--primary-neon);
-            padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 85%;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.3);
-        }
-
-        .login-box h3 { margin-top: 0; font-size: 1.6rem; letter-spacing: 1px; }
-
-        .google-login-btn {
-            background: #ffffff; color: #000000; font-weight: bold; border: none;
-            padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%;
-            margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="cyber-grid"></div>
