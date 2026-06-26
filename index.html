@@ -3,59 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Arcade | Next-Gen Cyber Hub</title>
+    <title>Vortex Arcade | Ultimate Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* === الأساسيات والخلفية الديناميكية === */
         :root {
+            --bg-color: #0f0c29;
             --primary: #ff007f;
-            --secondary: #7f00ff;
-            --bg: #050508;
-            --card: #0e0e16;
+            --secondary: #7b2cbf;
+            --text-light: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-light); overflow-x: hidden; }
+
+        /* الأشكال المتحركة في الخلفية */
+        .background-shapes { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; }
+        .shape { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 10s infinite alternate ease-in-out; }
+        .shape1 { width: 400px; height: 400px; background: var(--primary); top: -10%; left: -10%; animation-delay: 0s; }
+        .shape2 { width: 500px; height: 500px; background: var(--secondary); bottom: -20%; right: -10%; animation-delay: 2s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(50px) scale(1.1); }
         }
 
-        body {
-            background-color: var(--bg);
-            color: #ffffff;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+        /* === الهيدر وتسجيل الدخول === */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(15, 12, 41, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 2px; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .login-btn { background: linear-gradient(45deg, var(--primary), var(--secondary)); border: none; padding: 10px 25px; color: white; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+
+        /* === رسالة الترحيب الذكية === */
+        #welcome-toast { position: fixed; top: 100px; right: -400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-left: 5px solid var(--primary); padding: 20px; border-radius: 10px; z-index: 1000; transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #welcome-toast.show { right: 20px; }
+        .toast-title { font-weight: 800; font-size: 18px; margin-bottom: 5px; color: var(--primary); }
+        
+        /* === قسم الألعاب (Infinite Scroll) === */
+        .games-section { padding: 50px; text-align: center; }
+        .games-section h2 { font-size: 36px; margin-bottom: 30px; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
+        .game-card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); transition: 0.3s; cursor: pointer; }
+        .game-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); border-color: var(--primary); }
+        .game-img { width: 100%; height: 150px; background: #333; border-radius: 10px; margin-bottom: 15px; object-fit: cover; }
+        .loading-spinner { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* === قسم التعريف (About Me) === */
+        .about-me { background: rgba(0,0,0,0.4); padding: 50px; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .dev-avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px; }
+
+        /* === تصميم نافذة تسجيل الدخول (Popup) === */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-content {
+            background: rgba(20, 15, 45, 0.9); border: 1px solid var(--primary);
+            padding: 40px; border-radius: 20px; width: 90%; max-width: 400px;
+            text-align: center; position: relative;
+            transform: translateY(-50px) scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(255, 0, 127, 0.2);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+        
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; background: none; border: none;
+            color: #fff; font-size: 28px; cursor: pointer; transition: 0.3s;
+        }
+        .close-modal:hover { color: var(--primary); transform: rotate(90deg); }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        .input-group input {
+            width: 100%; padding: 15px 15px 15px 45px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff;
+            font-size: 16px; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); }
+        
+        .submit-login-btn {
+            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+        .submit-login-btn:hover { box-shadow: 0 0 20px var(--primary); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <!-- الأشكال المتحركة في الخلفية -->
+    <div class="background-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+    </div>
+
+    <!-- الإشعار الترحيبي -->
+    <div id="welcome-toast">
+        <div class="toast-title"><i class="fas fa-gamepad"></i> Hey there!</div>
+        <div id="toast-msg">Welcome to our world, dear!</div>
+    </div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="logo">Vortex <span>Arcade</span></div>
+        <nav class="nav-links">
+            <a href="#">Home</a>
+            <a href="#games">All Games</a>
+            <a href="#about">About Developer</a>
+        </nav>
+        <button class="login-btn"><i class="fas fa-user"></i> Login / Register</button>
+    </header>
+
+    <!-- قسم الألعاب الديناميكي -->
+    <section class="games-section" id="games">
+        <h2>🔥 Trending Games</h2>
+        <div class="games-grid" id="games-container">
+            <!-- الألعاب ستظهر هنا تلقائياً -->
+        </div>
+        <div class="loading-spinner" id="loader"></div>
+    </section>
+
+    <!-- قسم المطور -->
+    <section class="about-me" id="about">
+        <img src="https://ui-avatars.com/api/?name=Radwa+Saleh&background=ff007f&color=fff" alt="Radwa" class="dev-avatar">
+        <h2>Radwa Saleh</h2>
+        <p style="color: #aaa; margin: 10px 0 20px;">Independent Web Developer & UI/UX Designer</p>
+        <p style="max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            Welcome to Vortex Arcade. I created this platform to provide a seamless, beautiful, and dynamic gaming experience without annoying interruptions. Let's level up together!
+        </p>
+    </section>
+
+    <!-- نافذة تسجيل الدخول (Popup) -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal-btn">&times;</button>
+            <h2>Welcome Back, Gamer!</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 14px;">Log in to save your progress</p>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="submit-login-btn">Let's Play</button>
+            </form>
+            <p style="margin-top: 15px; font-size: 14px;">Don't have an account? <a href="#" style="color: var(--primary); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script>
+        // === 1. نظام الترحيب الذكي (Smart Welcome) ===
+        window.addEventListener('DOMContentLoaded', () => {
+            const toast = document.getElementById('welcome-toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const lastVisit = localStorage.getItem('vortex_lastVisit');
+            const now = new Date();
+
+            if (!lastVisit) {
+                // أول زيارة
+                toastMsg.innerText = "Welcome to our world, dear!";
+            } else {
+                // زيارة سابقة - حساب الأيام
+                const lastDate = new Date(lastVisit);
+                const diffTime = Math.abs(now - lastDate);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+                
+                if (diffDays > 0) {
+                    const formattedDate = lastDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    toastMsg.innerText = `We missed you! You haven't visited us since ${formattedDate}.`;
+                } else {
+                    toastMsg.innerText = "Welcome back! Ready for more games?";
+                }
+            }
+
+            localStorage.setItem('vortex_lastVisit', now.toISOString());
+            setTimeout(() => toast.classList.add('show'), 1000);
+            setTimeout(() => toast.classList.remove('show'), 6000);
+        });
+
+        // === 2. نظام تحميل الألعاب (Infinite Scroll) ===
+        const gamesContainer = document.getElementById('games-container');
+        const loader = document.getElementById('loader');
+        let gameIndex = 1;
+
+        function createGameCard(index) {
+            const div = document.createElement('div');
+            div.className = 'game-card';
+            div.innerHTML = `
+                <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&q=80" alt="Game" class="game-img">
+                <h3>Awesome Game ${index}</h3>
+                <p style="color: var(--primary); margin-top: 5px;"><i class="fas fa-play"></i> Play Now</p>
+            `;
+            return div;
         }
 
-        /* جزيئات النيون المتحركة في الخلفية */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
+        function loadGames(count = 8) {
+            loader.style.display = 'block';
+            setTimeout(() => { 
+                for (let i = 0; i < count; i++) {
+                    gamesContainer.appendChild(createGameCard(gameIndex));
+                    gameIndex++;
+                }
+                loader.style.display = 'none';
+            }, 800);
         }
 
-        /* الهيدر ورسالة الترحيب الذكية */
-        header {
-            padding: 50px 20px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(255, 0, 127, 0.1), transparent);
-            border-bottom: 1px solid rgba(255, 0, 127, 0.2);
-        }
+        loadGames(12);
 
-        h1 {
-            font-size: 3rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px var(--primary);
-        }
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                if (loader.style.display !== 'block' && gameIndex < 50) { 
+                    loadGames(4);
+                }
+            }
+        });
 
-        .welcome-msg {
-            font-size: 1.2rem;
-            color: #00ffff;
-            margin-top: 15px;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
+        // === 3. تشغيل نافذة تسجيل الدخول (Modal) ===
+        const loginBtn = document.querySelector('.login-btn');
+        const loginModal = document.getElementById('login-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
 
-        /* حاوية الأدوات (الدخول والتعريف) */
-        .top-bar {
+        loginBtn.addEventListener('click', () => {
+            loginModal.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
 
